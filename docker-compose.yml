@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  postgres-produtos:
+    image: postgres
+    container_name: postgres-produtos
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      DB_PRODUTOS_PORT: 5434
+      POSTGRES_DB: db_produtos
+    ports:
+      - "5434:5432"
+    networks:
+      - spring
+
+networks:
+  spring:
+    driver: bridge
