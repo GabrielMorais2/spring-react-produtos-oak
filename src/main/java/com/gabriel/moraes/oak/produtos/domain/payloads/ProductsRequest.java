@@ -15,14 +15,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ProductsRequest {
 
-    @NotBlank
+    @NotBlank(message = "O nome do produto é obrigatório")
     private String nameProduct;
-    @NotBlank
+    @NotBlank(message = "A descrição do produto é obrigatório")
     private String description;
-    @NotNull
-    @Positive
+    @NotNull(message = "O valor precisa ser positivo e maior do que zero")
+    @Positive(message = "O valor precisa ser positivo e maior do que zero")
     private BigDecimal value;
-    @NotNull
+    @NotNull(message = "A disponibilidade do produto é obrigatória")
     private AvailableSale availableSale;
 
 }

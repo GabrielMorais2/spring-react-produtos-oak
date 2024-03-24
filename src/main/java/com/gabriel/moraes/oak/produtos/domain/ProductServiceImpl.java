@@ -72,6 +72,7 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException("Value must be greater than 0");
         }
 
+
         if (!(availableSale.equals(AvailableSale.SIM) || availableSale.equals(AvailableSale.NAO))) {
             throw new IllegalArgumentException("Available sale must be 'SIM' or 'NAO'");
         }
