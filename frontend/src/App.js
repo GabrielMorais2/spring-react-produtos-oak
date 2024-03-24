@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import Formulario from './components/Formulario';
-import Tabela from './components/Tabela';
+import Formulario from './components/cadastro de produtos/Formulario';
+import Tabela from './components/listagem de produtos/Tabela';
 import ReactPaginate from 'react-paginate';
 
 function App() {
@@ -129,9 +129,10 @@ function App() {
         setMostrarFormulario(true);
     }
 
-    const listarProdutos = () => {
+    const mostrarlListagemDeProdutos = () => {
         setMostrarBotoes(false);
         setMostrarFormulario(false);
+        fetchProducts();
     }
     const selecionarProduto = (indice) => {
         setMostrarFormulario(true);
@@ -149,7 +150,7 @@ function App() {
     return (
         <div>
             {mostrarFormulario ? (
-                <Formulario  botao={mostrarBotoes} eventoTeclado={aoDigitar} cadastrarProduto={cadastrarProduto} obj={objProduto} remover={removerProduto} alterar={alterarProduto} cancelar={limparFormulario} listarProdutos={listarProdutos} />
+                <Formulario  botao={mostrarBotoes} eventoTeclado={aoDigitar} cadastrarProduto={cadastrarProduto} obj={objProduto} remover={removerProduto} alterar={alterarProduto} cancelar={limparFormulario} listarProdutos={mostrarlListagemDeProdutos} />
             ) : (
                 <>
                     <Tabela vetor={produtos} selecionar={selecionarProduto} cancelar={mostrarCadastroDeProdutos}/>

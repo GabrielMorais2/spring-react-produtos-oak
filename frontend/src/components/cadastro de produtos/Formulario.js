@@ -1,3 +1,5 @@
+import './Formulario.css';
+
 function Formulario({botao, eventoTeclado, cadastrarProduto, obj, cancelar, remover, alterar, listarProdutos}){
 
     return(

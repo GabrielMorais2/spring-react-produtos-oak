@@ -1,3 +1,5 @@
+import './Tabela.css';
+
 function Tabela({ vetor, selecionar, cancelar }) {
     return (
         <div>
@@ -6,6 +8,7 @@ function Tabela({ vetor, selecionar, cancelar }) {
                 <tr>
                     <th scope="col">Nome</th>
                     <th scope="col">Valor</th>
+                    <th scope="col">Acões</th>
                 </tr>
                 </thead>
 
@@ -15,11 +18,11 @@ function Tabela({ vetor, selecionar, cancelar }) {
                         <td><div className="td-table">{obj.nameProduct}</div></td>
                         <td><div className="td-table">R$ {obj.value}</div></td>
                         <td><div className="btn-table"><button onClick={() => { selecionar(indice) }} className="btn btn-success">Selecionar</button></div></td>
-                        <td><div className="btn-table"><button onClick={cancelar} className='btn btn-primary'>Cadastrar produto</button></div></td>
                     </tr>
                 ))}
                 </tbody>
             </table>
+            <div className="btn-cadastrar-produto"><button onClick={cancelar} className='btn btn-primary'>Cadastrar novo produto</button></div>
         </div>
     )
 }
