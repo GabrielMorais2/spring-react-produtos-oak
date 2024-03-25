@@ -1,7 +1,7 @@
 import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
-import { NumericFormat } from 'react-number-format';
+import {NumericFormat} from 'react-number-format';
 import './Formulario.css';
 
 function Formulario({botao, eventoTeclado, cadastrarProduto, obj, cancelar, remover, alterar, listarProdutos}){
@@ -36,6 +36,7 @@ function Formulario({botao, eventoTeclado, cadastrarProduto, obj, cancelar, remo
                             type="text"
                             id="nameProduct"
                             name="nameProduct"
+                            value={obj.nameProduct}
                             placeholder="Digite o nome do produto"
                             className={`form-control ${errors.nameProduct && touched.nameProduct ? 'is-invalid' : ''}`}
                             onInput={eventoTeclado}
@@ -48,6 +49,7 @@ function Formulario({botao, eventoTeclado, cadastrarProduto, obj, cancelar, remo
                             as="textarea"
                             id="description"
                             name="description"
+                            value={obj.description}
                             placeholder="Digite a descrição do produto"
                             className={`form-control ${errors.description && touched.description ? 'is-invalid' : ''}`}
                             onInput={eventoTeclado}
@@ -65,7 +67,7 @@ function Formulario({botao, eventoTeclado, cadastrarProduto, obj, cancelar, remo
                             allowNegative={false}
                             prefix={'R$'}
                             onInput={eventoTeclado}
-                            value={values.value}
+                            value={obj.value}
                             onValueChange={(values) => {
                                 setFieldValue('value', values.floatValue || '');
                             }}
@@ -74,7 +76,7 @@ function Formulario({botao, eventoTeclado, cadastrarProduto, obj, cancelar, remo
                     </div>
                     <div className="form-group">
                         <label htmlFor="availableSale">Disponível para Venda:</label>
-                        <Field as="select" name="availableSale" className="form-control" onInput={eventoTeclado}>
+                        <Field as="select" name="availableSale" className="form-control" onInput={eventoTeclado} value={eventoTeclado.value}>
                             <option value="SIM">Sim</option>
                             <option value="NAO">Não</option>
                         </Field>

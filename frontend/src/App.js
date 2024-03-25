@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import Formulario from './components/Formulario';
 import Tabela from './components/Tabela';
@@ -6,6 +6,7 @@ import Paginacao from "./components/Paginacao";
 import ProductListService from "./service/ProductListService";
 
 function App() {
+
     const produto = {
         id: 0,
         nameProduct: '',
@@ -14,10 +15,10 @@ function App() {
         availableSale: 'SIM'
     };
 
+    const [objProduto, setObjProduto] = useState(produto);
     const [mostrarFormulario, setMostrarFormulario] = useState(true);
     const [mostrarBotoes, setMostrarBotoes] = useState(true);
     const [produtos, setProdutos] = useState([]);
-    const [objProduto, setObjProduto] = useState(produto);
     const [pageNumber, setPageNumber] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const produtosPerPage = 10;
@@ -33,16 +34,6 @@ function App() {
                 setTotalPages(data.totalPages);
             });
     };
-
-    const limparFormulario = () => {
-        setObjProduto(objProduto.nameProduct = produto.nameProduct,
-            objProduto.description = produto.description,
-            objProduto.value = produto.value,
-            objProduto.availableSale = produto.availableSale,);
-        setMostrarBotoes(true);
-        setMostrarFormulario(true);
-    };
-
 
     const aoDigitar = (e) => {
         let valor = e.target.value;
@@ -99,8 +90,7 @@ function App() {
                         return produto;
                     }));
 
-                    setObjProduto(produto);
-                    setMostrarFormulario(false);
+                    mostrarListagemDeProdutos();
 
                 }
             })
@@ -110,13 +100,15 @@ function App() {
     };
 
 
-    const mostrarCadastroDeProdutos = () => {
+    const limparFormulario = () => {
+        setObjProduto(produto);
         setMostrarBotoes(true);
         setMostrarFormulario(true);
     };
 
+
+
     const mostrarListagemDeProdutos = () => {
-        setMostrarBotoes(false);
         setMostrarFormulario(false);
         fetchProducts();
     };
@@ -134,7 +126,7 @@ function App() {
     };
 
     return (
-        <div>
+        <div className="div-body">
             {mostrarFormulario ? (
                 <Formulario
                     botao={mostrarBotoes}
@@ -148,7 +140,7 @@ function App() {
                 />
             ) : (
                 <>
-                    <Tabela vetor={produtos} selecionar={selecionarProduto} cancelar={mostrarCadastroDeProdutos}/>
+                    <Tabela vetor={produtos} selecionar={selecionarProduto} cancelar={limparFormulario}/>
                     <Paginacao pageCount={pageCount} changePage={changePage} />
                 </>
             )}

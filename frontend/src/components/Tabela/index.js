@@ -1,5 +1,5 @@
 import './Tabela.css'
-import { NumericFormat } from 'react-number-format';
+import {NumericFormat} from 'react-number-format';
 
 function Tabela({ vetor, selecionar, cancelar }) {
     return (

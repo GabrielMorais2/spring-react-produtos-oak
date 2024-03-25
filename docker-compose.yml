@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  postgres-todo:
+  postgres-produtos:
     image: postgres:16-alpine
     container_name: postgres-produtos
     environment:
@@ -30,10 +30,10 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      postgres-todo:
+      postgres-produtos:
         condition: service_healthy
     environment:
-      - POSTGRES_HOST=postgres-todo
+      - POSTGRES_HOST=postgres-produtos
     networks:
       - react-spring
       - spring-postgres
@@ -49,8 +49,6 @@ services:
       - react-spring
     depends_on:
       - backend
-    environment:
-      VITE_API_URL: http://backend:8080
     expose:
      - 80
 
