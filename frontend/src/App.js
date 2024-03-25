@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
-import Formulario from './components/cadastro de produtos/Formulario';
-import Tabela from './components/listagem de produtos/Tabela';
-import ReactPaginate from 'react-paginate';
+import Formulario from './components/Formulario';
+import Tabela from './components/Tabela';
+import Paginacao from "./components/Paginacao";
+import ProductListService from "./service/ProductListService";
 
 function App() {
     const produto = {
@@ -11,69 +12,64 @@ function App() {
         description: '',
         value: 0,
         availableSale: 'SIM'
-    }
+    };
 
-    // UseState
     const [mostrarFormulario, setMostrarFormulario] = useState(true);
     const [mostrarBotoes, setMostrarBotoes] = useState(true);
     const [produtos, setProdutos] = useState([]);
-    const [objProduto, setObjProduto] = useState((produto));
+    const [objProduto, setObjProduto] = useState(produto);
     const [pageNumber, setPageNumber] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const produtosPerPage = 10;
 
     useEffect(() => {
-        fetchProducts();
+        fetchProducts(); // eslint-disable-next-line
     }, [pageNumber]);
 
     const fetchProducts = () => {
-        fetch(`http://localhost:8080/v1/products?page=${pageNumber}&size=${produtosPerPage}&sort=value,desc`) // Adiciona o parâmetro sort para ordenar por valor em ordem decrescente
-            .then(response => response.json())
+        ProductListService.fetchProducts(pageNumber, produtosPerPage)
             .then(data => {
                 setProdutos(data.content);
                 setTotalPages(data.totalPages);
-            })
-            .catch(error => console.error('Erro ao buscar produtos:', error));
+            });
     };
 
-    const aoDigitar = (e) => {
-        setObjProduto({ ...objProduto, [e.target.name]: e.target.value });
-    }
+    const limparFormulario = () => {
+        setObjProduto(objProduto.nameProduct = produto.nameProduct,
+            objProduto.description = produto.description,
+            objProduto.value = produto.value,
+            objProduto.availableSale = produto.availableSale,);
+        setMostrarBotoes(true);
+        setMostrarFormulario(true);
+    };
 
+
+    const aoDigitar = (e) => {
+        let valor = e.target.value;
+        if (e.target.name === "value") {
+            valor = valor.replace(/[^\d.]/g, '');
+        }
+        setObjProduto({ ...objProduto, [e.target.name]: e.target.name === "value" ? valor : e.target.value });
+    }
     const cadastrarProduto = () => {
-        fetch('http://localhost:8080/v1/products', {
-            method:'post',
-            body:JSON.stringify(objProduto),
-            headers:{
-                'Content-type':'application/json',
-                'Accept':'application/json'
-            }
-        })
-            .then(response => response.json())
+        ProductListService.addProduct(objProduto)
             .then(response => {
                 if (response.message !== undefined) {
-                    if(response.errors !== undefined && response.errors.length > 0){
-                        alert(response.errors[0].message);
+                    if (response.errors !== undefined && response.errors.length > 0) {
+                        console.log(response.errors[0].message);
                     } else {
-                        alert(response.message);
+                        console.log(response.message);
                     }
                 } else {
                     alert('Produto cadastrado com sucesso!');
-                    limparFormulario();
-                    fetchProducts(); // Atualiza a lista de produtos
-                    setMostrarFormulario(false); // Oculta o formulário após cadastrar um produto
+                    fetchProducts();
+                    setMostrarFormulario(false);
                 }
-            })
-    }
+            });
+    };
 
     const removerProduto = () => {
-        fetch(`http://localhost:8080/v1/products/${objProduto.id}`, {
-            method: 'delete',
-            headers: {
-                'Content-type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
+        ProductListService.deleteProduct(objProduto.id)
             .then(() => {
                 alert('Produto deletado com sucesso');
                 setProdutos(produtos.filter(produto => produto.id !== objProduto.id));
@@ -85,21 +81,13 @@ function App() {
     };
 
     const alterarProduto = () => {
-        fetch(`http://localhost:8080/v1/products/${objProduto.id}`, {
-            method:'put',
-            body:JSON.stringify(objProduto),
-            headers:{
-                'Content-type':'application/json',
-                'Accept':'application/json'
-            }
-        })
-            .then(response => response.json())
+        ProductListService.updateProduct(objProduto)
             .then(response => {
                 if (response.message !== undefined) {
                     if (response.errors !== undefined && response.errors.length > 0) {
-                        alert(response.errors[0].message);
+                        console.log(response.errors[0].message);
                     } else {
-                        alert(response.message);
+                        console.log(response.message);
                     }
                 } else {
                     alert('Produto alterado com sucesso');
@@ -111,34 +99,33 @@ function App() {
                         return produto;
                     }));
 
+                    setObjProduto(produto);
                     setMostrarFormulario(false);
+
                 }
             })
             .catch(error => {
                 console.error('Erro ao alterar produto:', error);
             });
-    }
-    const limparFormulario = () => {
-        setMostrarBotoes(true);
-        setMostrarFormulario(true);
-        setObjProduto(produto);
-    }
+    };
+
 
     const mostrarCadastroDeProdutos = () => {
         setMostrarBotoes(true);
         setMostrarFormulario(true);
-    }
+    };
 
-    const mostrarlListagemDeProdutos = () => {
+    const mostrarListagemDeProdutos = () => {
         setMostrarBotoes(false);
         setMostrarFormulario(false);
         fetchProducts();
-    }
+    };
+
     const selecionarProduto = (indice) => {
         setMostrarFormulario(true);
         setMostrarBotoes(false);
         setObjProduto(produtos[indice]);
-    }
+    };
 
     const pageCount = totalPages;
 
@@ -146,25 +133,23 @@ function App() {
         setPageNumber(selected);
     };
 
-
     return (
         <div>
             {mostrarFormulario ? (
-                <Formulario  botao={mostrarBotoes} eventoTeclado={aoDigitar} cadastrarProduto={cadastrarProduto} obj={objProduto} remover={removerProduto} alterar={alterarProduto} cancelar={limparFormulario} listarProdutos={mostrarlListagemDeProdutos} />
+                <Formulario
+                    botao={mostrarBotoes}
+                    eventoTeclado={aoDigitar}
+                    cadastrarProduto={cadastrarProduto}
+                    obj={objProduto}
+                    remover={removerProduto}
+                    alterar={alterarProduto}
+                    cancelar={limparFormulario}
+                    listarProdutos={mostrarListagemDeProdutos}
+                />
             ) : (
                 <>
                     <Tabela vetor={produtos} selecionar={selecionarProduto} cancelar={mostrarCadastroDeProdutos}/>
-                    <ReactPaginate
-                        previousLabel={"Anterior"}
-                        nextLabel={"Próximo"}
-                        pageCount={pageCount}
-                        onPageChange={changePage}
-                        containerClassName={"pagination"}
-                        previousLinkClassName={"pagination__item"}
-                        nextLinkClassName={"pagination__item"}
-                        disabledClassName={"pagination__item--disabled"}
-                        activeClassName={"pagination__item--active"}
-                    />
+                    <Paginacao pageCount={pageCount} changePage={changePage} />
                 </>
             )}
         </div>

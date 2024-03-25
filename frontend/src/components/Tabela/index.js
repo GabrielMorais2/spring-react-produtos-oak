@@ -1,4 +1,5 @@
-import './Tabela.css';
+import './Tabela.css'
+import { NumericFormat } from 'react-number-format';
 
 function Tabela({ vetor, selecionar, cancelar }) {
     return (
@@ -16,7 +17,16 @@ function Tabela({ vetor, selecionar, cancelar }) {
                 {vetor.map((obj, indice) => (
                     <tr key={indice}>
                         <td><div className="td-table">{obj.nameProduct}</div></td>
-                        <td><div className="td-table">R$ {obj.value}</div></td>
+                        <td><div className="td-table">
+                            <NumericFormat
+                                value={obj.value}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                prefix={'R$ '}
+                            />
+                        </div></td>
                         <td><div className="btn-table"><button onClick={() => { selecionar(indice) }} className="btn btn-success">Selecionar</button></div></td>
                     </tr>
                 ))}

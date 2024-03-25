@@ -3,7 +3,7 @@ spring:
     init:
       mode: always
   datasource:
-    url: jdbc:postgresql://localhost:${DB_PRODUTOS_PORT:5434}/${POSTGRES_DB:db_produtos}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${DB_PORT:5434}/${POSTGRES_DB:db_produtos}
     username: ${POSTGRES_USER:root}
     password: ${POSTGRES_PASSWORD:root}
   jpa:
@@ -14,3 +14,14 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show_sql: true
     defer-datasource-initialization: true
+
+openapi:
+  service:
+    title: api produtos
+    version: 1.0.0
+    url: http://localhost:8080
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
