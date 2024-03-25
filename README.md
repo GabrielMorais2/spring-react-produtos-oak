@@ -16,7 +16,7 @@ Este repositório contém uma aplicação web para gerenciar produtos, composta 
 
 ## Video da aplicação funcionando
 
-
+https://github.com/GabrielMorais2/spring-react-produtos-oak/assets/68476116/c9c9d892-d3cf-4a8b-8841-0918323e0341
 
 ## Requisitos
 
